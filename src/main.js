@@ -1,6 +1,14 @@
 import Vue from 'vue'
 import App from './App.vue'
 
+import State from "./State";
+import Rules from "./Rules";
+import AStar from "./AStar";
+
+new State();
+new Rules();
+new AStar();
+
 export const eventEmitter = new Vue();
 
 // Исходное поле
