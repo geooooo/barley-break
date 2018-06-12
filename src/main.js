@@ -1,14 +1,6 @@
 import Vue from 'vue'
 import App from './App.vue'
 
-import State from "./State";
-import Rules from "./Rules";
-import AStar from "./AStar";
-
-new State();
-new Rules();
-new AStar();
-
 export const eventEmitter = new Vue();
 
 // Исходное поле
@@ -29,29 +21,45 @@ export function randomize() {
     }
 }
 
-let callback;
-let i;
-let isStoped;
+// Обработка хода игрока
+export function move(cell) {
+  let r;
+  let c;
+OUT:
+  for (r = 0; r < 4; r++) {
+    for (c = 0; c < 4; c++) {
+      if (field[r*4 + c] == cell) break OUT;
+    }
+  }
 
-// Сброс AI
-export function resetAI() {
-  isStoped = true;
-  i = 0;
+  if ((c < 3) && (field[r*4 + c + 1] == "")) {
+    field[r*4 + c + 1] = cell;
+  } else if ((c > 0) && (field[r*4 + c - 1] == "")) {
+    field[r*4 + c - 1] = cell;
+  } else if ((r < 3) && (field[(r+1)*4 + c] == "")) {
+    field[(r+1)*4 + c] = cell;
+  } else if ((r > 0) && (field[(r-1)*4 + c] == "")) {
+    field[(r-1)*4 + c] = cell;
+  } else {
+    return false;
+  }
+
+  field[r*4 + c] = "";
+  return true;
 }
 
-// Запуск AI
-export function startAI(_callback) {
-    resetAI();
-    isStoped = false;
-    callback = _callback;
-    stepAI()
-}
-
-// Ход AI
-export function stepAI() {
-    if (isStoped || (i == 2)) return;
-    callback({x:i,y:i}, {x:3-i,y:3-i});
-    i++;
+// Проверка на победу
+export function isWin() {
+  let tmp = [
+    "1", "2", "3", "4",
+    "5", "6", "7", "8",
+    "9", "10", "11", "12",
+    "13", "14", "15", ""
+  ];
+  for (let i = 0; i < field.length; i++) {
+    if (field[i] != tmp[i]) return false;
+  }
+  return true;
 }
 
 new Vue({

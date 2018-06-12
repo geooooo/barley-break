@@ -1,12 +1,7 @@
 <template>
 
 <div class="control">
-    <button @click="clickReset" class="control__element">Сброс</button>
-    <button @click="clickStart" class="control__element">Старт</button>
-    <label>
-        Задержка:
-        <input @keyup.enter="changeDelay($event)" :value="delay" class="control__element" type="text">
-    </label>
+    <button @click="clickReset" class="control__element">Начать заново</button>
 </div>
 
 </template>
@@ -17,25 +12,13 @@
 
 export default {
     data() {
-        return {
-            delay: 1000
-        };
+        return {};
     },
     methods: {
         clickReset() {
             this.$emit("onClickReset");
-        },
-        clickStart() {
-            this.$emit("onClickStart");
-        },
-        changeDelay($event) {
-            this.delay = Number($event.target.value);
-            this.$emit("onChangeDelay", this.delay);
         }
-    },
-    created() {
-        this.$emit("onChangeDelay", this.delay);
-    },
+    }
 };
 
 </script>
@@ -44,23 +27,10 @@ export default {
 
 <style scope>
 
-.control {
-    display: flex;
-    justify-content: center;
-    border: 1px solid black;
-    padding: 10px;
-    background-color: #eee;
-}
-
-.control > * {
-    margin-right: 10px;
-}
-.control > *:last-child {
-    margin-right: 0;
-}
+.control {}
 
 .control__element {
-    padding: 5px;
+    padding: 10px;
 }
 button.control__element {
     cursor: pointer;
