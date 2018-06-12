@@ -1,11 +1,12 @@
 <template>
 
 <div class="app">
-    <field class="app__field"></field>
+    <field
+      @onClick="clickCell"
+      class="app__field"
+    ></field>
     <control
       @onClickReset="clickReset"
-      @onClickStart="clickStart"
-      @onChangeDelay="changeDelay"
       class="app__control"
     ></control>
 </div>
@@ -23,9 +24,7 @@ import {
     eventEmitter,
     field,
     randomize,
-    resetAI,
-    startAI,
-    stepAI
+    move
 } from "./main";
 
 export default {
@@ -34,35 +33,17 @@ export default {
         control: Control
     },
     data() {
-        return {
-            delay: 0
-        };
+        return {};
     },
     methods: {
+      clickCell(cell) {
+          if (!move(cell)) return;
+          eventEmitter.$emit("onSetField", field);
+      },
       clickReset() {
-          resetAI();
           randomize();
-          this.setField();
-      },
-      clickStart() {
-          startAI((cell1, cell2) => {
-              this.swap(this.delay, cell1, cell2);
-          });
-      },
-      changeDelay(delay) {
-          this.delay = delay;
-      },
-      swap(delay, cell1, cell2) {
-          eventEmitter.$emit("onSwap", delay, cell1, cell2);
-      },
-      setField() {
           eventEmitter.$emit("onSetField", field);
       }
-    },
-    created() {
-        eventEmitter.$on("onSwapped", () => {
-            stepAI();
-        })
     }
 };
 
@@ -80,7 +61,7 @@ export default {
 }
 
 .app__field {
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }
 
 </style>
